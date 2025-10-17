@@ -5,8 +5,12 @@ import os
 import sys
 import asyncio
 from flask import Flask
+from dotenv import load_dotenv
 import threading
 from bot_commands import mostrar_comandos  # <-- archivo renombrado
+
+load_dotenv()
+COOKIES_FILE = os.getenv("COOKIES_FILE")
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 if not TOKEN:
@@ -36,7 +40,10 @@ async def descargar_mp3(url):
             'preferredquality': '192',
         }],
         'ffmpeg_location': FFMPEG_LOCATION,
+        'cookiefile': 'cookies.txt',
     }
+
+    
 
     with yt_dlp.YoutubeDL(opciones) as ydl:
         info = ydl.extract_info(url, download=True)
