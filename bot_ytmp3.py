@@ -4,6 +4,8 @@ import yt_dlp
 import os
 import sys
 import asyncio
+from flask import Flask
+import threading
 from bot_commands import mostrar_comandos  # <-- archivo renombrado
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -96,4 +98,8 @@ def main():
     
 
 if __name__ == "__main__":
+    # Iniciar Flask en hilo aparte
+    from web import run_flask  # si lo pusiste en otro archivo
+    threading.Thread(target=run_flask).start()
+
     main()
