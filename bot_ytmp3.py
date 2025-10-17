@@ -78,7 +78,7 @@ async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def main():
+def main():
     app = ApplicationBuilder().token(TOKEN).build()
 
     # Handlers de comandos
@@ -91,9 +91,9 @@ async def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, recibir_mensaje))
     
     print("🤖 Bot en marcha... (Ctrl+C para detener)")
-    await app.run_polling()
+    app.run_polling()
     
     
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
