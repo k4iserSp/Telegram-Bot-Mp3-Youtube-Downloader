@@ -29,34 +29,45 @@ FFMPEG_LOCATION = obtener_ruta_ffmpeg()
 TEMP_DIR = "downloads"
 os.makedirs(TEMP_DIR, exist_ok=True)
 
-import shutil
 import tempfile
+import shutil
 
 async def descargar_mp3(url):
     """Descarga el audio del video en formato MP3 y devuelve la ruta al archivo."""
-    
-    # Crear una copia temporal de las cookies (en un directorio que sí sea escribible)
+    # Crear una copia temporal del archivo de cookies
     tmp_cookie_file = os.path.join(tempfile.gettempdir(), "cookies.txt")
-    shutil.copy(COOKIES_FILE, tmp_cookie_file)
+    try:
+        shutil.copy("/etc/secrets/cookies.txt", tmp_cookie_file)
+    except Exception as e:
+        raise Exception(f"No se pudo copiar el archivo de cookies: {e}")
 
     opciones = {
-        'format': 'bestaudio/best',
-        'outtmpl': os.path.join(TEMP_DIR, '%(title)s.%(ext)s'),
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-        'ffmpeg_location': FFMPEG_LOCATION,
-        'cookiefile': tmp_cookie_file,
-        'nocheckcertificate': True,  # opcional, evita errores SSL
+        "format": "bestaudio/best",
+        "outtmpl": os.path.join(TEMP_DIR, "%(title)s.%(ext)s"),
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ],
+        "ffmpeg_location": FFMPEG_LOCATION,
+        "cookiefile": tmp_cookie_file,
+        "quiet": True,
+        "nocheckcertificate": True,
     }
 
-    with yt_dlp.YoutubeDL(opciones) as ydl:
-        info = ydl.extract_info(url, download=True)
-        titulo = ydl.prepare_filename(info)
-        mp3_path = os.path.splitext(titulo)[0] + ".mp3"
-        return mp3_path
+    try:
+        with yt_dlp.YoutubeDL(opciones) as ydl:
+            info = ydl.extract_info(url, download=True)
+            titulo = ydl.prepare_filename(info)
+            mp3_path = os.path.splitext(titulo)[0] + ".mp3"
+            return mp3_path
+    finally:
+        # Eliminar la copia temporal de cookies
+        if os.path.exists(tmp_cookie_file):
+            os.remove(tmp_cookie_file)
+
 
     with yt_dlp.YoutubeDL(opciones) as ydl:
         info = ydl.extract_info(url, download=True)
@@ -123,3 +134,4 @@ if __name__ == "__main__":
     threading.Thread(target=run_flask).start()
 
     main()
+
