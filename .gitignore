@@ -1,9 +1,0 @@
-# Evitar subir el archivo .env con tokens y rutas privadas
-.env
-
-# Evitar subir cookies de YouTube
-cookies.txt
-
-# Carpetas temporales de tu proyecto
-__pycache__/
-downloads/
