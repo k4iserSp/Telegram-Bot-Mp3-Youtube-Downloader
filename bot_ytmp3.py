@@ -29,8 +29,16 @@ FFMPEG_LOCATION = obtener_ruta_ffmpeg()
 TEMP_DIR = "downloads"
 os.makedirs(TEMP_DIR, exist_ok=True)
 
+import shutil
+import tempfile
+
 async def descargar_mp3(url):
     """Descarga el audio del video en formato MP3 y devuelve la ruta al archivo."""
+    
+    # Crear una copia temporal de las cookies (en un directorio que sí sea escribible)
+    tmp_cookie_file = os.path.join(tempfile.gettempdir(), "cookies.txt")
+    shutil.copy(COOKIES_FILE, tmp_cookie_file)
+
     opciones = {
         'format': 'bestaudio/best',
         'outtmpl': os.path.join(TEMP_DIR, '%(title)s.%(ext)s'),
@@ -40,10 +48,15 @@ async def descargar_mp3(url):
             'preferredquality': '192',
         }],
         'ffmpeg_location': FFMPEG_LOCATION,
-        'cookiefile': COOKIES_FILE,
+        'cookiefile': tmp_cookie_file,
+        'nocheckcertificate': True,  # opcional, evita errores SSL
     }
 
-    
+    with yt_dlp.YoutubeDL(opciones) as ydl:
+        info = ydl.extract_info(url, download=True)
+        titulo = ydl.prepare_filename(info)
+        mp3_path = os.path.splitext(titulo)[0] + ".mp3"
+        return mp3_path
 
     with yt_dlp.YoutubeDL(opciones) as ydl:
         info = ydl.extract_info(url, download=True)
