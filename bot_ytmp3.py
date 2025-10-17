@@ -10,7 +10,7 @@ import threading
 from bot_commands import mostrar_comandos  # <-- archivo renombrado
 
 load_dotenv()
-COOKIES_FILE = os.getenv("COOKIES_FILE")
+COOKIES_FILE = "/run/secrets/cookies.txt"
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 if not TOKEN:
@@ -40,7 +40,7 @@ async def descargar_mp3(url):
             'preferredquality': '192',
         }],
         'ffmpeg_location': FFMPEG_LOCATION,
-        'cookiefile': 'cookies.txt',
+        'cookiefile': COOKIES_FILE,
     }
 
     
