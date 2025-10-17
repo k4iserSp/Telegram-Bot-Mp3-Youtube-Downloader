@@ -1,0 +1,11 @@
+python-telegram-bot==20.7
+yt-dlp
+python-dotenv
+os
+sys
+Update
+ApplicationBuilder
+MessageHandler
+filters
+ContextTypes
+CommandHandler
