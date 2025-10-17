@@ -10,7 +10,7 @@ import threading
 from bot_commands import mostrar_comandos  # <-- archivo renombrado
 
 load_dotenv()
-COOKIES_FILE = "/etc/secrets/cookies.txt"
+COOKIES_FILE = "/etc/secrets/cookies"
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 if not TOKEN:
