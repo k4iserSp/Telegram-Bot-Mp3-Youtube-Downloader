@@ -3,6 +3,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 import yt_dlp
 import os
 import sys
+import asyncio
 from bot_commands import mostrar_comandos  # <-- archivo renombrado
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -90,7 +91,8 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, recibir_mensaje))
     
     print("🤖 Bot en marcha... (Ctrl+C para detener)")
-    app.run_polling()
+    asyncio.run(app.run_polling())
+    
 
 if __name__ == "__main__":
     main()
