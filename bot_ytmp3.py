@@ -37,7 +37,7 @@ async def descargar_mp3(url):
     # Crear una copia temporal del archivo de cookies
     tmp_cookie_file = os.path.join(tempfile.gettempdir(), "cookies.txt")
     try:
-        shutil.copy("/etc/secrets/cookies.txt", tmp_cookie_file)
+        shutil.copy("/etc/secrets/cookies", tmp_cookie_file)
     except Exception as e:
         raise Exception(f"No se pudo copiar el archivo de cookies: {e}")
 
@@ -134,4 +134,5 @@ if __name__ == "__main__":
     threading.Thread(target=run_flask).start()
 
     main()
+
 
