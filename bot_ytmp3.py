@@ -8,6 +8,9 @@ from flask import Flask
 from dotenv import load_dotenv
 import threading
 from bot_commands import mostrar_comandos  # <-- archivo renombrado
+from ffmpeg_setup import ensure_ffmpeg
+
+FFMPEG_LOCATION = ensure_ffmpeg()
 
 load_dotenv()
 COOKIES_FILE = "/etc/secrets/cookies"
